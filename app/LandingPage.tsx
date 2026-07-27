@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, ReactNode, useState } from "react";
+import { FormEvent, ReactNode, useRef, useState } from "react";
 
 const facts = [
   "Przedmiar robót",
@@ -986,11 +986,64 @@ function CTASection() {
 }
 
 function QualificationForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
+    void handleRequest();
+  }
+
+  async function handleRequest() {
+    const form = formRef.current;
+
+    if (!form?.reportValidity()) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      company: String(formData.get("company") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      city: String(formData.get("city") ?? ""),
+      tenders: String(formData.get("tenders") ?? ""),
+      teamSize: String(formData.get("teamSize") ?? ""),
+      trades: formData.getAll("trades").map(String),
+      formatsAndSystems: formData.getAll("formatsAndSystems").map(String),
+      dataAvailability: String(formData.get("dataAvailability") ?? ""),
+    };
+
+    setSubmitting(true);
+    setServerError(null);
+
+    try {
+      const response = await fetch("/api/qualification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await response.json()) as { ok: boolean; error?: string };
+
+      if (!response.ok || !data.ok) {
+        setServerError(
+          data.error ??
+            "Nie udało się wysłać formularza. Prosimy spróbować ponownie.",
+        );
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setServerError(
+        "Nie udało się wysłać formularza. Prosimy spróbować ponownie.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -1028,6 +1081,7 @@ function QualificationForm() {
         </div>
 
         <form
+          ref={formRef}
           onSubmit={handleSubmit}
           className="rounded-lg border border-[#cfd9dc] bg-white p-4 shadow-sm sm:p-6"
         >
@@ -1098,15 +1152,15 @@ function QualificationForm() {
 
           <button
             type="submit"
-            className="mt-7 w-full rounded-md bg-[var(--accent)] px-5 py-3 text-base font-semibold text-white transition hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 sm:w-auto"
+            disabled={submitting}
+            className="mt-7 w-full rounded-md bg-[var(--accent)] px-5 py-3 text-base font-semibold text-white transition hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 disabled:opacity-60 sm:w-auto"
           >
-            Poproś o wstępną ocenę
+            {submitting ? "Wysyłanie..." : "Poproś o wstępną ocenę"}
           </button>
 
           <p className="mt-4 max-w-2xl text-xs leading-5 text-[#68737a]">
-            Formularz działa obecnie w trybie demonstracyjnym i nie wysyła
-            danych. Po uruchomieniu obsługi zgłoszeń dane będą przetwarzane
-            zgodnie z zasadami opisanymi w{" "}
+            Dane z formularza są przetwarzane w celu oceny zapytania i
+            przygotowania pierwszej rozmowy, zgodnie z zasadami opisanymi w{" "}
             <a
               href="/polityka-prywatnosci"
               className="font-semibold text-[var(--accent-dark)] underline decoration-[#9db8c9] underline-offset-4 transition hover:text-[var(--accent)]"
@@ -1116,13 +1170,22 @@ function QualificationForm() {
             .
           </p>
 
+          {serverError ? (
+            <p
+              role="alert"
+              className="mt-5 rounded-md border border-[#efc5c0] bg-[#fff5f3] px-4 py-3 text-sm font-semibold text-[#8a2d24]"
+            >
+              {serverError}
+            </p>
+          ) : null}
+
           {submitted ? (
             <p
               role="status"
               className="mt-5 rounded-md border border-[#bad4c5] bg-[#edf7f0] px-4 py-3 text-sm font-semibold text-[#28533b]"
             >
-              Dziękujemy. Formularz działa w trybie demonstracyjnym — po
-              podłączeniu usługi zgłoszenia będą trafiać bezpośrednio do zespołu.
+              Dziękujemy. Skontaktujemy się z Państwem, aby ustalić termin
+              pierwszej rozmowy.
             </p>
           ) : null}
         </form>
