@@ -16,9 +16,14 @@ Strona będzie dostępna pod adresem `http://localhost:3000`.
 
 ```bash
 npm run build
-npm run lint
-npm test
+npm run typecheck
 ```
 
 Formularz działa lokalnie w trybie demonstracyjnym i nie wysyła danych do
 zewnętrznej usługi. Karta podglądu linku znajduje się w `public/og.png`.
+
+## Netlify
+
+Projekt korzysta ze standardowego Next.js, tak jak niemiecka wersja strony.
+Po podłączeniu repozytorium w Netlify framework i ustawienia kompilacji są
+wykrywane automatycznie. Polecenie kompilacji to `npm run build`.
