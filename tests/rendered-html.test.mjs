@@ -60,6 +60,7 @@ test("includes Polish legal pages with localized privacy language", async () => 
 
   assert.match(legalHtml, /Informacje prawne/);
   assert.match(legalHtml, /AgentLayer AI L\.L\.C-FZ/);
+  assert.match(legalHtml, /105507193800001/);
   assert.match(legalHtml, /AgentenWerk KI GmbH in Gründung/);
   assert.match(privacyHtml, /Polityka prywatności/);
   assert.match(privacyHtml, /trybie demonstracyjnym i nie przesyła/);

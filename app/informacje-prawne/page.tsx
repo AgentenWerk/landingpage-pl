@@ -22,6 +22,10 @@ const dubaiDetails: DetailRow[] = [
   ["Numer licencji", "2650237.01"],
   ["Numer rejestracyjny", "2650237"],
   [
+    "Numer rejestracji podatku dochodowego od osób prawnych (Corporate Tax Registration Number)",
+    "105507193800001",
+  ],
+  [
     "Adres",
     "Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, U.A.E.",
   ],
