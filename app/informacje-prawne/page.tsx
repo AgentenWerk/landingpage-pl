@@ -51,7 +51,7 @@ const dubaiDetails: DetailRow[] = [
 ];
 
 const viennaDetails: DetailRow[] = [
-  ["Firma", "AgentenWerk KI GmbH in Gründung"],
+  ["Firma", "AgentenWerk KI GmbH"],
   ["Siedziba", "Wiedeń, Austria"],
   [
     "Adres prowadzenia działalności",
@@ -68,8 +68,8 @@ const viennaDetails: DetailRow[] = [
       Alexandru-Rares Bacila
     </ExternalLink>,
   ],
-  ["Numer w rejestrze przedsiębiorców", "w trakcie rejestracji"],
-  ["Sąd rejestrowy", "zostanie uzupełniony po rejestracji"],
+  ["Numer w rejestrze przedsiębiorców", "FN 686063 t"],
+  ["Sąd rejestrowy", "Handelsgericht Wien"],
   ["Numer VAT UE", "zostanie uzupełniony po nadaniu"],
   [
     "Przedmiot działalności",
@@ -117,16 +117,9 @@ export default function LegalInformationPage() {
           />
           <EntityCard
             eyebrow="Wiedeń"
-            title="AgentenWerk KI GmbH in Gründung"
+            title="AgentenWerk KI GmbH"
             details={viennaDetails}
           />
-        </div>
-        <div className="mx-auto max-w-7xl px-5 pb-10 sm:px-8 lg:px-10">
-          <p className="rounded-lg border border-[#d9dedc] bg-white p-5 text-sm leading-7 text-[#4d5961]">
-            Spółka AgentenWerk KI GmbH jest w trakcie tworzenia i rejestracji.
-            Numer w rejestrze przedsiębiorców, właściwy sąd rejestrowy oraz
-            numer VAT UE zostaną uzupełnione po ich nadaniu.
-          </p>
         </div>
       </section>
     </main>
