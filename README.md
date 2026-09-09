@@ -19,8 +19,10 @@ npm run build
 npm run typecheck
 ```
 
-Formularz działa lokalnie w trybie demonstracyjnym i nie wysyła danych do
-zewnętrznej usługi. Karta podglądu linku znajduje się w `public/og.png`.
+Formularz wysyła zgłoszenia do wspólnego panelu zapytań. Do uruchomienia
+integracji potrzebne są zmienne środowiskowe opisane w `.env.example`.
+W środowisku lokalnym, bez tych zmiennych, przekazanie zgłoszenia jest pomijane.
+Karta podglądu linku znajduje się w `public/og.png`.
 
 ## Netlify
 
