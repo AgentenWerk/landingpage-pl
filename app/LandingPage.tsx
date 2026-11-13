@@ -987,10 +987,55 @@ function CTASection() {
 
 function QualificationForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
+    if (submitting || submitted) return;
+
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      company: String(formData.get("company") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      city: String(formData.get("city") ?? ""),
+      tenders: String(formData.get("tenders") ?? ""),
+      teamSize: String(formData.get("teamSize") ?? ""),
+      website: String(formData.get("website") ?? ""),
+      trades: formData.getAll("trades").map(String),
+      formatsAndSystems: formData.getAll("formatsAndSystems").map(String),
+      dataAvailability: String(formData.get("dataAvailability") ?? ""),
+    };
+
+    setSubmitting(true);
+    setServerError(null);
+
+    try {
+      const response = await fetch("/api/qualification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(20_000),
+      });
+      const data = (await response.json()) as { ok?: boolean; error?: string };
+
+      if (!response.ok || data.ok !== true) {
+        setServerError(data.error ?? "Nie udało się wysłać zgłoszenia. Prosimy spróbować ponownie.");
+        return;
+      }
+
+      setSubmitted(true);
+      form.reset();
+    } catch {
+      setServerError("Nie udało się wysłać zgłoszenia. Prosimy sprawdzić połączenie i spróbować ponownie.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -1029,8 +1074,15 @@ function QualificationForm() {
 
         <form
           onSubmit={handleSubmit}
+          aria-busy={submitting}
           className="rounded-lg border border-[#cfd9dc] bg-white p-4 shadow-sm sm:p-6"
         >
+          <div aria-hidden="true" className="hidden">
+            <label>
+              Strona internetowa
+              <input name="website" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextField label="Imię i nazwisko" name="name" autoComplete="name" required />
             <TextField label="Firma" name="company" autoComplete="organization" required />
@@ -1098,14 +1150,14 @@ function QualificationForm() {
 
           <button
             type="submit"
-            className="mt-7 w-full rounded-md bg-[var(--accent)] px-5 py-3 text-base font-semibold text-white transition hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 sm:w-auto"
+            disabled={submitting || submitted}
+            className="mt-7 w-full rounded-md bg-[var(--accent)] px-5 py-3 text-base font-semibold text-white transition hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            Poproś o wstępną ocenę
+            {submitting ? "Wysyłanie…" : submitted ? "Zgłoszenie wysłane" : "Poproś o wstępną ocenę"}
           </button>
 
           <p className="mt-4 max-w-2xl text-xs leading-5 text-[#68737a]">
-            Formularz działa obecnie w trybie demonstracyjnym i nie wysyła
-            danych. Po uruchomieniu obsługi zgłoszeń dane będą przetwarzane
+            Dane podane w formularzu przetwarzamy w celu obsługi zgłoszenia i kontaktu,
             zgodnie z zasadami opisanymi w{" "}
             <a
               href="/polityka-prywatnosci"
@@ -1116,13 +1168,19 @@ function QualificationForm() {
             .
           </p>
 
+          {serverError ? (
+            <p role="alert" className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-800">
+              {serverError}
+            </p>
+          ) : null}
+
           {submitted ? (
             <p
               role="status"
               className="mt-5 rounded-md border border-[#bad4c5] bg-[#edf7f0] px-4 py-3 text-sm font-semibold text-[#28533b]"
             >
-              Dziękujemy. Formularz działa w trybie demonstracyjnym — po
-              podłączeniu usługi zgłoszenia będą trafiać bezpośrednio do zespołu.
+              Dziękujemy. Zgłoszenie zostało wysłane. Skontaktujemy się,
+              aby ustalić dogodny termin rozmowy.
             </p>
           ) : null}
         </form>

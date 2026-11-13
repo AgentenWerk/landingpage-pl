@@ -61,8 +61,8 @@ const summaryItems = [
     "Obecnie nie używamy narzędzi śledzących, pikseli ani plików cookie, które nie są niezbędne.",
   ],
   [
-    "Formularz jest obecnie wersją demonstracyjną",
-    "W lokalnej wersji serwisu formularz nie przesyła danych. Zasady poniżej będą obowiązywać po uruchomieniu obsługi zgłoszeń.",
+    "Formularz kontaktowy",
+    "Zgłoszenia trafiają do naszego wewnętrznego systemu obsługi zapytań w celu oceny dopasowania i kontaktu.",
   ],
   [
     "Dwa punkty kontaktowe",
@@ -177,9 +177,8 @@ export default function PrivacyPolicyPage() {
 
       <LegalSection eyebrow="Formularz" title="Zapytanie kwalifikacyjne">
         <p>
-          Formularz działa obecnie w trybie demonstracyjnym i nie przesyła
-          wpisanych danych do naszego zespołu ani do zewnętrznego systemu. Po
-          uruchomieniu obsługi zgłoszeń podane informacje będą przetwarzane w
+          Dane podane w formularzu trafiają do naszego wewnętrznego systemu
+          obsługi zapytań i są przetwarzane w
           celu oceny zapytania, kontaktu i przygotowania pierwszej rozmowy.
         </p>
         <ul className="grid gap-2">
@@ -194,7 +193,7 @@ export default function PrivacyPolicyPage() {
           ))}
         </ul>
         <p>
-          Po uruchomieniu obsługi zgłoszeń podstawą przetwarzania będą działania
+          Podstawą przetwarzania są działania
           podejmowane na Państwa żądanie przed zawarciem umowy oraz nasz prawnie
           uzasadniony interes polegający na sprawnej obsłudze zapytań i
           komunikacji z potencjalnymi klientami, w szczególności art. 6 ust. 1
