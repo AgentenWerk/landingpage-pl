@@ -47,8 +47,8 @@ export async function forwardInquiryToDashboard(
       },
       signal: AbortSignal.timeout(10_000),
       body: JSON.stringify({
-        // The existing dashboard API key is scoped to this inbox.
-        source: "ki-kalkulant",
+        // Recipient scopes follow this source; the API key must match it.
+        source: "ki-kalkulant-pl",
         externalId: leadId,
         contact: {
           name: values.name,

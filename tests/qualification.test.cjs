@@ -76,14 +76,14 @@ test("missing credentials cannot produce a false success", async () => {
   assert.equal((await response.json()).ok, false);
 });
 
-test("Polish answers and attribution reach the existing authenticated inbox", async () => {
+test("Polish answers reach the Polish source used by recipient scopes", async () => {
   process.env.INQUIRY_DASHBOARD_URL = "https://dashboard.example/";
   process.env.INQUIRY_DASHBOARD_API_KEY = "test-only-key";
   global.fetch = async (url, options) => {
     assert.equal(url, "https://dashboard.example/api/inquiries");
     assert.equal(options.headers.Authorization, "Bearer test-only-key");
     const body = JSON.parse(options.body);
-    assert.equal(body.source, "ki-kalkulant");
+    assert.equal(body.source, "ki-kalkulant-pl");
     assert.match(body.externalId, /^lead_/);
     assert.match(body.summary, /^\[PL\]/);
     assert.equal(body.contact.name, "Jan Żółć");
