@@ -212,7 +212,7 @@ export async function POST(request: Request) {
       ok: true,
       leadId: `lead_${randomUUID()}`,
       message:
-        "Dziękujemy. Skontaktujemy się, aby ustalić dogodny termin rozmowy.",
+        "Dziękujemy! Otrzymaliśmy Państwa zapytanie. Skontaktujemy się z Państwem, aby omówić kolejne kroki.",
     });
   }
 
@@ -241,6 +241,6 @@ export async function POST(request: Request) {
     ok: true,
     leadId,
     message:
-      "Dziękujemy. Skontaktujemy się, aby ustalić dogodny termin rozmowy.",
+      "Dziękujemy! Otrzymaliśmy Państwa zapytanie. Skontaktujemy się z Państwem, aby omówić kolejne kroki.",
   });
 }

@@ -1179,8 +1179,8 @@ function QualificationForm() {
               role="status"
               className="mt-5 rounded-md border border-[#bad4c5] bg-[#edf7f0] px-4 py-3 text-sm font-semibold text-[#28533b]"
             >
-              Dziękujemy. Zgłoszenie zostało wysłane. Skontaktujemy się,
-              aby ustalić dogodny termin rozmowy.
+              Dziękujemy! Otrzymaliśmy Państwa zapytanie. Skontaktujemy się
+              z Państwem, aby omówić kolejne kroki.
             </p>
           ) : null}
         </form>
